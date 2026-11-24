@@ -4,15 +4,18 @@ Neighbors welcome — especially if you're tech-savvy. This site is deliberately
 simple (static HTML/CSS/JS, no build step, no backend) so it can live on GitHub
 Pages for free and anyone can read the code.
 
-## Easiest high-value contribution: make search smarter
+## Easiest high-value contribution: make the AI search smarter
 
-The search quality lives in the `TOPICS` thesaurus at the top of `search.js`.
-If a natural question doesn't find the right passage:
+Search quality lives in the worker (`worker/src/index.js`): the catalog it
+builds from the index, the selector prompt that picks which parts of the
+books govern a question, and the answer prompt. There are deliberately no
+pre-built answers or keyword shortcuts. If a natural question gets a bad
+answer:
 
-1. Run the site locally and reproduce the bad search.
-2. Add the missing synonym/topic terms (words the *documents* actually use for
-   that idea), or adjust weights in `expandQuery` / `search`.
-3. In your pull request, name the query you tested and what improved.
+1. Reproduce it on the live site and look at which passages the AI used
+   (they're printed under the answer, with citations).
+2. Improve the selector/answer prompt or the catalog keywords in the worker.
+3. In your pull request, name the question you tested and what improved.
 
 Other welcome help:
 

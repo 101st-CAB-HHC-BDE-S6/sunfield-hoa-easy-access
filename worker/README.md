@@ -1,9 +1,12 @@
 # Sunfield HOA AI answer backend
 
-A tiny Cloudflare Worker that turns the site's top search passages into a
-plain-English answer using Workers AI (free tier). The static GitHub Pages
-site does the searching; this worker only writes the answer, strictly from
-the passages it is sent, with citations. It stores nothing.
+A tiny Cloudflare Worker where the AI does the searching itself using
+Workers AI (free tier). The static GitHub Pages site sends only the
+resident's question. The worker keeps a map of the rule books (built from
+the site's `data/search-index.json`), the AI picks by meaning which parts
+govern the question and pulls those passages, then writes a plain-English
+answer strictly from them, with citations. It stores nothing; identical
+questions may be served from the edge cache.
 
 ## Deploy (one time)
 
@@ -23,6 +26,6 @@ is already in `wrangler.toml`).
 
 ## API
 
-`POST /ask` with JSON `{ "question": "...", "passages": [{ "doc", "section", "page", "text" }] }`
-returns `{ "answer": "...", "citations": [ ...the passages... ] }`.
+`POST /ask` with JSON `{ "question": "..." }`
+returns `{ "answer": "...", "citations": [ ...the passages the AI used... ] }`.
 `GET /` is a health check.

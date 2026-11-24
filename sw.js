@@ -1,6 +1,6 @@
 /* Sunfield HOA Easy Access — offline cache (cache-first for the app shell and index). */
-const CACHE = "sunfield-hoa-v4";
-const ASSETS = ["./", "index.html", "styles.css", "search.js", "answers.js", "app.js",
+const CACHE = "sunfield-hoa-v5";
+const ASSETS = ["./", "index.html", "styles.css", "app.js",
   "manifest.webmanifest", "icons/icon.svg", "data/search-index.json"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

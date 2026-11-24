@@ -17,29 +17,31 @@ the **exact rule text**, each result cited with its **source document, section/r
 Open the live site, then **Add to Home Screen** (Share menu on iPhone, ⋮ menu on Android).
 It's a PWA: no app store, no account, and it works offline after the first visit.
 
-## How the "smart" search works (honestly)
+## How the search works (honestly)
 
-The search itself has no backend, no API key, and runs entirely in your browser.
-On top of it sits one optional piece: an **AI answer** written by a small
-Cloudflare Worker (`worker/`, Workers AI, free tier) that receives your question
-plus the top passages the browser search found and may summarize *only those
-passages*, with citations. It stores nothing, and if it is ever unreachable the
-site silently falls back to the short answers and passages below. The pieces:
+There are **no pre-built answers, no topic shortcuts and no keyword tricks**.
+An AI does the searching itself, in a small Cloudflare Worker (`worker/`,
+Workers AI, free tier):
 
-- `data/search-index.json` — passages extracted from the HOA PDFs, each with document,
-  page, and the nearest section/article/rule heading found in the source text
-  (or an explicit "no section number in source" — numbers are never invented).
-- `answers.js` — the **short answer** shown first: for the main topics, a
-  plain-English summary written by hand only from the indexed passages, citing
-  them by document + page (resolved against the index at runtime; if the
-  documents don't directly address a topic, the answer says so). Other queries
-  get key requirement sentences pulled word-for-word from the top matches.
-- `search.js` — ranked keyword search plus a hand-built **HOA topic thesaurus**
-  (`TOPICS`): searching *lights* also searches *lighting, illumination, exterior
-  fixtures…*; asking about a *car wash* also searches *vehicles, driveways, water…*.
-  It also strips question words and does light fuzzy matching.
-- Making it smarter = improving the thesaurus and ranking. That's the best place
-  for neighbors to contribute — see [CONTRIBUTING.md](CONTRIBUTING.md).
+1. The worker holds a map of the rule books: every document split into small
+   parts, each with its section heading, pages, and what it is about — built
+   from `data/search-index.json` (passages extracted from the HOA PDFs, each
+   with document, page, and the nearest section/article/rule heading found in
+   the source text, or an explicit "no section number in source" — numbers
+   are never invented).
+2. The AI reads your question, decides **by meaning** which parts of the
+   books govern it (residents say "water usage"; the books say "irrigation"),
+   and pulls those passages, plus keyword searches in the documents' own
+   wording that it chooses itself.
+3. The AI then writes a plain-English answer from *only those passages*,
+   with citations. If the passages don't cover the question, it must say so —
+   and it must never treat "not forbidden" as "allowed".
+
+Your question is sent to the worker to do this; nothing is stored (identical
+questions may be served from the edge cache). If the AI is ever unreachable,
+the site falls back to a plain keyword search over the same passages so the
+rule text is always available. Making it smarter = improving the worker's
+selection and answer prompts — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Sources & known gaps
 

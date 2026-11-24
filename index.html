@@ -26,18 +26,9 @@
     <form id="search-form" role="search">
       <label class="sr-only" for="q">Search the Sunfield HOA rules</label>
       <input id="q" type="search" inputmode="search" autocomplete="off" autofocus
-             placeholder="Try: lights, parking, can I wash my car in the driveway?">
-      <button type="submit">Search</button>
+             placeholder="Ask anything about the rules…">
+      <button type="submit">Ask</button>
     </form>
-    <div class="examples" aria-label="Example searches">
-      <button type="button" data-example="lights">lights</button>
-      <button type="button" data-example="can I wash my car in the driveway?">car wash</button>
-      <button type="button" data-example="parking">parking</button>
-      <button type="button" data-example="fence">fence</button>
-      <button type="button" data-example="shed">shed</button>
-      <button type="button" data-example="rentals">rentals</button>
-      <button type="button" data-example="fines">fines</button>
-    </div>
     <p id="doccount" class="muted-light"></p>
   </div>
 </header>
@@ -48,21 +39,18 @@
 
   <section class="card about">
     <h2>How this search works</h2>
-    <p>Ask in plain words — a word, a topic, or a full question. The search understands topics,
-    not just exact words: “lights” also finds <em>lighting</em>, <em>illumination</em> and
-    <em>exterior fixtures</em>; asking about washing your car also looks at vehicles, driveways
-    and water. Every result shows its source — document, section/rule, and page — with the
-    <strong>exact rule text</strong>, so you can check it yourself.</p>
-    <p>Results start with an <strong>answer</strong>: an AI (running free on Cloudflare) reads
-    the top passages the search found and writes a plain-English answer from <em>only</em> those
-    passages, with citations — if the passages don't answer your question, it must say so
-    instead of guessing. Under it is a hand-written short answer for the main topics, then the
-    passages themselves. Your question and the passages are sent to the AI to write the
-    answer; nothing is stored.</p>
-    <p>The search itself runs entirely on your phone or computer, and neither it nor the AI
-    decides what is allowed — they find and summarize the passages, and the documents
-    themselves are the final word. When in doubt, ask the
-    association / FirstService Residential.</p>
+    <p>Ask in plain words — a word, a topic, or a full question. There are no pre-built
+    answers and no keyword shortcuts: an AI (running free on Cloudflare) reads your question,
+    thinks about what it really concerns, and searches the rule books itself — it has a map of
+    every part of every document and picks the parts that govern your question, even when the
+    documents use different words than you did. It then writes a plain-English answer from
+    <em>only</em> the passages it found, with citations — if those passages don't answer your
+    question, it must say so instead of guessing.</p>
+    <p>Under the answer are the passages it used, each with its source — document,
+    section/rule, and page — in the <strong>exact rule text</strong>, so you can check it
+    yourself. Your question is sent to the AI to do the searching; nothing is stored.
+    Neither the site nor the AI decides what is allowed — the documents themselves are the
+    final word. When in doubt, ask the association / FirstService Residential.</p>
     <h2>Install it like an app</h2>
     <p>On your phone, open this page in your browser and choose <strong>“Add to Home Screen”</strong>
     (Share menu on iPhone, ⋮ menu on Android). It installs as a web app — no app store, no account.</p>
