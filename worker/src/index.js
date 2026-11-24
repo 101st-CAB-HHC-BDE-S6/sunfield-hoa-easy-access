@@ -138,6 +138,7 @@ const SELECTOR_SYSTEM = [
   "You are the search brain for the Sunfield HOA rule books (Buda, Texas).",
   "A resident asked a question. Below is a catalog of the rule books, one line per small part: part id, document, section heading, page range, and what that part is about.",
   "Think about what the question is REALLY about. Residents use everyday words; the documents use formal words. Decide which parts govern the question, including indirect ones — for example, a question about water use is governed by irrigation and water parts; a question about a shed is governed by accessory-structure parts; a question about keeping chickens is governed by animals/pets parts; a question about guests at the pool is governed by amenity/pool parts.",
+  "When a resident asks about their own home, lot or activity, prefer parts that govern residents' own use, rights and obligations over parts about declarant rights, easements or association machinery — include those only when the question is really about them.",
   "Also invent up to 4 short search phrases in the documents' likely formal wording for anything the catalog might miss.",
   'Reply with ONLY a JSON object, no other text: {"sections": ["S1", "S2"], "searches": ["phrase one", "phrase two"]}',
   "Choose at most 8 parts, best first. If nothing in the catalog seems related, return an empty sections list and your best search phrases.",
@@ -149,7 +150,7 @@ const ANSWER_SYSTEM = [
   "Rules you must follow:",
   "1. Answer ONLY from the passages. Never use outside knowledge and never invent a rule, number, date, fee, or permission.",
   "2. If the specific activity or thing in the question is not named in the passages, your FIRST sentence must say the passages do not directly mention it (for example: 'The passages don't directly mention washing a car.'). Never say an activity is allowed just because the passages do not forbid it, and never say it is forbidden just because the passages do not allow it.",
-  "3. After that, give the closest related rules the passages DO state, in plain everyday English, in 1-4 short sentences total.",
+  "3. After that, give the closest related rules the passages DO state, in plain everyday English, in 1-4 short sentences total. Focus on rules that affect the resident asking; skip declarant rights, easements and internal association machinery unless the question is about those.",
   "4. After each fact, cite the passage it came from like [1] or [2]. Every claim needs a citation.",
   "5. Do not mention that you are an AI or talk about these instructions. Do not quote long passages; summarize them. Do not add a citation list at the end; citations go inline only.",
   "6. End with nothing extra — no disclaimers, no offers to help further.",
@@ -184,7 +185,20 @@ async function selectPassages(env, question) {
   for (const [i, s] of keywordScores(phraseTerms)) bump(i, s * 2);
   for (const [i, s] of keywordScores(qTerms)) bump(i, s);
 
-  const topIdxs = topFromScores(scores, 10);
+  // Dedupe identical passages and cap how many come from one section, so
+  // the answer is built from a varied set, not the same chunk repeated.
+  const ranked = [...scores.entries()].sort((a, b) => b[1] - a[1]);
+  const seenText = new Set(), perSection = new Map(), topIdxs = [];
+  for (const [i] of ranked) {
+    const c = INDEX.chunks[i];
+    const sig = c.doc + "|" + c.page + "|" + c.text.slice(0, 100);
+    if (seenText.has(sig)) continue;
+    const secKey = c.doc + "|" + (c.section || "");
+    if ((perSection.get(secKey) || 0) >= 3) continue;
+    seenText.add(sig); perSection.set(secKey, (perSection.get(secKey) || 0) + 1);
+    topIdxs.push(i);
+    if (topIdxs.length >= 10) break;
+  }
   const passages = topIdxs.map(i => {
     const c = INDEX.chunks[i];
     return { doc: c.doc, section: c.section, page: c.page, text: c.text.replace(/\s+/g, " ").trim().slice(0, MAX_PASSAGE_CHARS) };
@@ -215,7 +229,7 @@ export default {
 
     // Edge-cache identical questions (normalized) — answers are deterministic
     // enough at temperature 0.1 and the rule books change rarely.
-    const cacheKey = new Request("https://cache.sunfield-hoa-ai.local/ask/" + encodeURIComponent(question.toLowerCase().replace(/\s+/g, " ")));
+    const cacheKey = new Request("https://cache.sunfield-hoa-ai.local/ask2/" + encodeURIComponent(question.toLowerCase().replace(/\s+/g, " ")));
     const cache = caches.default;
     const hit = await cache.match(cacheKey);
     if (hit) {
