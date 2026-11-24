@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2e1a47"/>
+      <stop offset="0.45" stop-color="#a63d5c"/>
+      <stop offset="0.75" stop-color="#e2703a"/>
+      <stop offset="1" stop-color="#f7b733"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#sky)"/>
+  <g fill="#ffd98a">
+    <g transform="translate(256 268)">
+      <circle r="58" fill="#ffe9b0"/>
+      <g id="rays">
+        <path d="M0 -118 L13 -72 L-13 -72 Z"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(30)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(60)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(90)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(120)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(150)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(180)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(210)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(240)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(270)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(300)"/>
+        <path d="M0 -118 L13 -72 L-13 -72 Z" transform="rotate(330)"/>
+      </g>
+    </g>
+  </g>
+  <path d="M0 402 Q128 366 256 402 T512 402 V512 H0 Z" fill="#40284f"/>
+  <path d="M0 438 Q128 408 256 438 T512 438 V512 H0 Z" fill="#241633"/>
+</svg>

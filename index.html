@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sunfield HOA Easy Access — Smart Search of the Sunfield Rules</title>
+<meta name="description" content="Smart, plain-language search over the Sunfield HOA rules, design guidelines and policies in Buda, Texas. Unofficial, resident-made.">
+<meta name="theme-color" content="#2e1a47">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <div class="brand">
+      <img src="icons/icon.svg" alt="" class="brand-icon" width="64" height="64">
+      <div>
+        <p class="wordmark">sunfield</p>
+        <h1>HOA Easy Access</h1>
+      </div>
+    </div>
+    <p class="tagline">Savor the Bright Life — and know the rules that come with it.</p>
+    <p class="unofficial">Unofficial, resident-made. Not the official Sunfield HOA / FirstService Residential site.</p>
+    <form id="search-form" role="search">
+      <label class="sr-only" for="q">Search the Sunfield HOA rules</label>
+      <input id="q" type="search" inputmode="search" autocomplete="off" autofocus
+             placeholder="Try: lights, parking, can I wash my car in the driveway?">
+      <button type="submit">Search</button>
+    </form>
+    <div class="examples" aria-label="Example searches">
+      <button type="button" data-example="lights">lights</button>
+      <button type="button" data-example="can I wash my car in the driveway?">car wash</button>
+      <button type="button" data-example="parking">parking</button>
+      <button type="button" data-example="fence">fence</button>
+      <button type="button" data-example="shed">shed</button>
+      <button type="button" data-example="rentals">rentals</button>
+      <button type="button" data-example="fines">fines</button>
+    </div>
+    <p id="doccount" class="muted-light"></p>
+  </div>
+</header>
+
+<main>
+  <section id="summary" aria-live="polite"></section>
+  <section id="results" aria-live="polite"></section>
+
+  <section class="card about">
+    <h2>How this search works</h2>
+    <p>Ask in plain words — a word, a topic, or a full question. The search understands topics,
+    not just exact words: “lights” also finds <em>lighting</em>, <em>illumination</em> and
+    <em>exterior fixtures</em>; asking about washing your car also looks at vehicles, driveways
+    and water. Every result shows its source — document, section/rule, and page — with the
+    <strong>exact rule text</strong>, so you can check it yourself.</p>
+    <p>This is a smart keyword/topic search that runs entirely on your phone or computer.
+    It is <strong>not</strong> an AI and it does not decide what is allowed — it finds the
+    passages, and the documents themselves are the final word. When in doubt, ask the
+    association / FirstService Residential.</p>
+    <h2>Install it like an app</h2>
+    <p>On your phone, open this page in your browser and choose <strong>“Add to Home Screen”</strong>
+    (Share menu on iPhone, ⋮ menu on Android). It installs as a web app — no app store, no account.</p>
+  </section>
+
+  <section class="card about">
+    <h2>Sources</h2>
+    <p>Searchable text was extracted from these Sunfield documents, downloaded from the
+    FirstService Residential resident portal on November 24, 2026, plus the public Quick Reference Guide:</p>
+    <ul id="sources-list"></ul>
+    <p><strong>Known gaps:</strong> the portal library does not contain a standalone base
+    <em>Community Charter</em> or standalone <em>Bylaws</em> — only their amendments and supplements
+    (the main rules document in the portal is filed under the Charter name). A few portal PDFs are
+    scanned images with no text layer; they are listed above and are not yet searchable.
+    If a search finds nothing, the answer may live in one of those — check the portal or ask the HOA office.</p>
+    <p class="muted">Hero art is an original sunset/sunburst design made for this site.
+    “Sunfield” is named only to identify the community this tool is about.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Sunfield HOA Easy Access — an unofficial, open-source, resident-made tool for Sunfield, Buda, Texas.</p>
+  <p>Not affiliated with the Sunfield Community Association, its developer, or FirstService Residential.
+  Rule text belongs to the association; the site code is MIT-licensed — neighbors are welcome to improve it on GitHub.</p>
+</footer>
+
+<script src="search.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
