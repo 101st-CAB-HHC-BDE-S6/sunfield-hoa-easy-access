@@ -8,51 +8,71 @@
 const TOPICS = [
   { id: "lights", label: "Lights & lighting",
     terms: ["light", "lights", "lighting", "lamp", "lamps", "illumination", "illuminated", "fixture", "fixtures", "bulb", "holiday lights", "christmas lights", "landscape lighting", "exterior lighting"],
+    triggers: ["light", "lights", "lighting", "lamp", "lamps", "illumination", "fixture", "fixtures", "bulb", "holiday lights", "christmas lights"],
     hint: "Passages about lighting, lamps, illumination and exterior fixtures." },
   { id: "parking", label: "Parking & vehicles",
     terms: ["park", "parking", "parked", "vehicle", "vehicles", "car", "cars", "truck", "trailer", "trailers", "boat", "rv", "camper", "motorcycle", "driveway", "garage", "street parking", "curb", "tow", "towing", "inoperable"],
+    triggers: ["park", "parking", "parked", "vehicle", "vehicles", "trailer", "trailers", "rv", "camper", "motorcycle", "street parking", "tow", "towing", "inoperable"],
     hint: "Passages about parking, vehicles, trailers, driveways and garages." },
   { id: "carwash", label: "Washing cars",
     terms: ["wash", "washing", "car wash", "vehicle maintenance", "repair", "driveway", "water", "hose", "runoff"],
+    triggers: ["wash", "washing", "car wash", "vehicle maintenance"],
     hint: "Passages that touch on washing or working on vehicles, driveways and water use — the rules may not use the words “car wash” at all." },
+  { id: "water", label: "Water & irrigation",
+    terms: ["water", "watering", "irrigation", "irrigate", "sprinkler", "sprinklers", "reclaimed", "re-claimed", "drought", "hose", "runoff", "drainage"],
+    triggers: ["water", "watering", "irrigation", "irrigate", "sprinkler", "sprinklers", "reclaimed", "re-claimed", "drought"],
+    hint: "Passages about water use, watering and irrigation systems." },
   { id: "fences", label: "Fences & walls",
     terms: ["fence", "fences", "fencing", "wall", "walls", "gate", "gates", "screening", "privacy"],
+    triggers: ["fence", "fences", "fencing", "wall", "walls", "gate", "gates"],
     hint: "Passages about fences, walls, gates and screening." },
   { id: "structures", label: "Sheds & structures",
     terms: ["shed", "sheds", "structure", "structures", "outbuilding", "storage", "playhouse", "greenhouse", "pergola", "gazebo", "deck", "patio", "addition", "accessory building"],
+    triggers: ["shed", "sheds", "structure", "structures", "outbuilding", "playhouse", "greenhouse", "pergola", "gazebo", "accessory building"],
     hint: "Passages about sheds, outbuildings and other accessory structures." },
   { id: "landscaping", label: "Landscaping & plants",
     terms: ["landscap", "plant", "plants", "tree", "trees", "shrub", "grass", "lawn", "yard", "garden", "mulch", "flower", "turf", "sod", "vegetation", "approved plant"],
+    triggers: ["landscap", "plant", "plants", "tree", "trees", "shrub", "grass", "lawn", "garden", "mulch", "flower", "turf", "sod", "approved plant"],
     hint: "Passages about landscaping, lawns, trees and which plants are approved." },
   { id: "trash", label: "Trash & recycling",
     terms: ["trash", "garbage", "recycl", "refuse", "waste", "bin", "container", "dumpster", "debris"],
+    triggers: ["trash", "garbage", "recycl", "refuse", "dumpster"],
     hint: "Passages about trash, recycling, bins and debris." },
   { id: "rentals", label: "Rentals & leasing",
     terms: ["rent", "rental", "lease", "leasing", "tenant", "tenants", "short term", "airbnb", "vrbo", "occupant"],
+    triggers: ["rent", "rental", "lease", "leasing", "tenant", "tenants", "short term", "airbnb", "vrbo"],
     hint: "Passages about renting or leasing a home, and tenants." },
   { id: "pets", label: "Pets & animals",
     terms: ["pet", "pets", "dog", "dogs", "cat", "cats", "animal", "animals", "livestock", "chicken", "hens", "leash"],
+    triggers: ["pet", "pets", "dog", "dogs", "cat", "cats", "animal", "animals", "livestock", "chicken", "hens", "leash"],
     hint: "Passages about pets and animals." },
   { id: "pool", label: "Pool & amenities",
     terms: ["pool", "swim", "swimming", "amenity", "amenities", "lazy river", "splash", "clubhouse", "pavilion", "playground", "trail", "fishing", "pond", "guest", "fob"],
+    triggers: ["pool", "swim", "swimming", "amenity", "amenities", "lazy river", "splash", "clubhouse", "pavilion"],
     hint: "Passages about the pools, amenity centers and common areas." },
   { id: "signs", label: "Signs & flags",
     terms: ["sign", "signs", "signage", "flag", "flags", "banner", "advertis"],
+    triggers: ["sign", "signs", "signage", "flag", "flags", "banner", "advertis"],
     hint: "Passages about signs, flags and banners." },
   { id: "arc", label: "Exterior changes & ARC approval",
     terms: ["architectural", "arc", "committee", "approval", "approved", "application", "exterior", "modification", "improvement", "paint", "color", "roof", "solar", "construction", "alteration"],
+    triggers: ["architectural", "arc", "solar", "paint", "roof", "exterior"],
     hint: "Passages about exterior changes and when Architectural Review Committee (ARC) approval is needed first." },
   { id: "fines", label: "Fines & enforcement",
     terms: ["fine", "fines", "fining", "enforcement", "violation", "violations", "penalty", "hearing", "notice", "cure", "lien", "fee", "fees", "assessment", "assessments"],
+    triggers: ["fine", "fines", "fining", "enforcement", "violation", "violations", "penalty", "hearing", "lien", "assessment", "assessments"],
     hint: "Passages about fines, violations, enforcement, fees and assessments." },
   { id: "noise", label: "Noise & nuisance",
     terms: ["noise", "nuisance", "quiet", "loud", "music", "party", "disturbance"],
+    triggers: ["noise", "nuisance", "quiet", "loud", "disturbance"],
     hint: "Passages about noise and nuisances." },
   { id: "homebusiness", label: "Home business",
     terms: ["business", "commercial", "office", "trade", "occupation", "work from home"],
+    triggers: ["business", "commercial", "office", "trade", "occupation", "work from home"],
     hint: "Passages about running a business from home." },
   { id: "maintenance", label: "Home & lot maintenance",
     terms: ["maintenance", "maintain", "repair", "upkeep", "condition", "appearance", "mow", "weed", "clean"],
+    triggers: ["maintenance", "maintain", "upkeep", "mow", "weed"],
     hint: "Passages about keeping your home and lot maintained." },
 ];
 
@@ -75,12 +95,26 @@ function expandQuery(raw) {
   const q = normalize(raw);
   const qtoks = tokensOf(q).filter(t => !STOP.has(t));
   const topics = [];
+  const termHit = (term) => {
+    const tt = tokensOf(term);
+    return tt.some(t => qtoks.some(qt => qt === t || stem(qt) === stem(t))) || (tt.length > 1 && q.includes(term));
+  };
+  // Stricter matcher for trigger words: a multi-word trigger like "car wash"
+  // only counts when the whole phrase (or all its words) is in the query —
+  // the single word "car" alone must not trigger the car-wash answer.
+  const triggerHit = (term) => {
+    const tt = tokensOf(term);
+    if (tt.length > 1) return q.includes(term) || tt.every(t => qtoks.some(qt => qt === t || stem(qt) === stem(t)));
+    return termHit(term);
+  };
   for (const topic of TOPICS) {
-    const hit = topic.terms.some(term => {
-      const tt = tokensOf(term);
-      return tt.some(t => qtoks.some(qt => qt === t || stem(qt) === stem(t))) || (tt.length > 1 && q.includes(term));
-    });
-    if (hit) topics.push(topic);
+    if (!topic.terms.some(termHit)) continue;
+    // "strong" = the query used one of the topic's distinctive trigger words,
+    // not just a shared expansion term (e.g. "water" alone must not count as
+    // asking about washing a car). Only strong topics may show a curated
+    // short answer; weak hits still expand the search and show a hint chip.
+    const strong = (topic.triggers || topic.terms).some(triggerHit);
+    topics.push({ ...topic, strong });
   }
   const weights = new Map(); // term -> weight
   const add = (term, w) => { if (!weights.has(term) || weights.get(term) < w) weights.set(term, w); };

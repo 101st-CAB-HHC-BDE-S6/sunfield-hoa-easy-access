@@ -18,11 +18,15 @@ const POOL = "Amenity Center Pool Rules";
 /* Topic priority when a query matches several topics: most specific intent
    first (e.g. a car-washing question also matches "parking", but the
    carwash answer is the honest one for it). */
-const ANSWER_PRIORITY = ["carwash", "fences", "structures", "rentals", "fines",
+const ANSWER_PRIORITY = ["carwash", "water", "fences", "structures", "rentals", "fines",
   "pool", "signs", "pets", "trash", "landscaping", "lights", "parking", "arc",
   "noise", "homebusiness", "maintenance"];
 
 const SHORT_ANSWERS = {
+  water: {
+    text: "The HOA documents don't set a watering schedule or limit how much water you can use. The water rules they do state are about irrigation: irrigation systems in Sunfield may use reclaimed water, and reclaimed water must be used for irrigation only — never for drinking. The documents also recognize that government rules can restrict watering (for example during drought restrictions), which can excuse planting delays.",
+    cites: [{ doc: RULES, page: 25, match: "Irrigation Systems" }, { doc: RULES, page: 29, match: "restricted water use" }],
+  },
   carwash: {
     text: "No rule in these documents directly mentions washing a car. The closest rules are about working on and parking vehicles: a vehicle may be repaired or restored only inside an enclosed garage (except emergency repairs needed to move it to a repair facility), and a vehicle may be parked only in the garage or in the driveway serving your own lot.",
     cites: [{ doc: RULES, page: 30, match: "shall be parked only in the garage" }],

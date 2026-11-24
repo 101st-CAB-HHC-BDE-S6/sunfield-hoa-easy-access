@@ -68,7 +68,12 @@ function keyPoints(results, query) {
 }
 
 function shortAnswerHtml(topics, results, query) {
-  const byPriority = [...topics].sort((a, b) => ANSWER_PRIORITY.indexOf(a.id) - ANSWER_PRIORITY.indexOf(b.id));
+  // A curated short answer may only appear when the query actually used one
+  // of the topic's distinctive trigger words (topic.strong). A weak topic hit
+  // (a shared expansion term like "water" or "driveway") must never pull in
+  // another topic's answer — those queries get key points instead.
+  const byPriority = topics.filter(t => t.strong)
+    .sort((a, b) => ANSWER_PRIORITY.indexOf(a.id) - ANSWER_PRIORITY.indexOf(b.id));
   for (const t of byPriority) {
     const a = SHORT_ANSWERS[t.id];
     if (!a) continue;
