@@ -6,7 +6,7 @@
    Questions and passage text are not stored or logged. */
 "use strict";
 
-const MODEL = "@cf/meta/llama-3.1-8b-instruct";
+const MODEL = "@cf/mistralai/mistral-small-3.1-24b-instruct";
 const ALLOWED_ORIGINS = [
   "https://101st-cab-hhc-bde-s6.github.io",
   "http://localhost:8000",
@@ -90,7 +90,7 @@ export default {
         temperature: 0.1,
       });
     } catch (e) {
-      return json(request, { error: "ai_failed" }, 502);
+      return json(request, { error: "ai_failed", detail: String((e && e.message) || e).slice(0, 300) }, 502);
     }
     const answer = String(
       (out && out.response) ||
