@@ -1,5 +1,5 @@
 /* Sunfield HOA Easy Access — offline cache (cache-first for the app shell and index). */
-const CACHE = "sunfield-hoa-v2";
+const CACHE = "sunfield-hoa-v3";
 const ASSETS = ["./", "index.html", "styles.css", "search.js", "answers.js", "app.js",
   "manifest.webmanifest", "icons/icon.svg", "data/search-index.json"];
 self.addEventListener("install", e => {

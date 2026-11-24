@@ -16,18 +16,21 @@ If a natural question doesn't find the right passage:
 
 Other welcome help:
 
-- **OCR the scanned PDFs** listed as "not yet searchable" on the site:
-  `tools/ocr_pdfs.py` (pdftoppm + tesseract) produces the text, then rebuild the
-  index with `tools/build_index.py` and open a PR with the updated
-  `data/search-index.json`.
+- **Improve the OCR text** for the scanned PDFs (noted as OCR on the site):
+  `tools/ocr_pdfs.py` (pdftoppm + tesseract) or `tools/ocr_rapid.py`
+  (PyMuPDF + RapidOCR) produces the text, then rebuild the index with
+  `tools/build_index.py` and open a PR with the updated `data/search-index.json`.
 - Better section/heading detection in `tools/build_index.py` (citations must
   always come from the source text — never invent a section or rule number).
 - Accessibility and mobile polish.
 
 ## Rules of the road
 
-- No backend, no accounts, no tracking, no API keys — the site must keep working
-  as static files on GitHub Pages, offline after first load.
+- No accounts, no tracking, no API keys in the site — the site must keep working
+  as static files on GitHub Pages, offline after first load. The optional AI
+  answer backend (`worker/`, a Cloudflare Worker + Workers AI) may only ever
+  summarize passages the search already found, with citations, and the site
+  must fall back to plain search whenever it is unreachable.
 - Don't present summaries as rulings. The site finds rule text; it never decides
   what's allowed. Plain-language hints must stay clearly labeled as pointers.
 - Keep the unofficial disclaimer intact.

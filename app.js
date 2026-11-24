@@ -1,6 +1,14 @@
 "use strict";
 let INDEX = null;
 
+/* AI answer backend (Cloudflare Worker + Workers AI, see worker/).
+   Empty = AI off and the site is search-only. When set, question-like
+   searches also ask the worker for a plain-English answer written only
+   from the top passages below, with citations. Any failure is silent —
+   the short answer and passages always remain. */
+const AI_ENDPOINT = "https://sunfield-hoa-ai.sunfield-hoa.workers.dev/ask";
+let aiSeq = 0;
+
 const $ = s => document.querySelector(s);
 
 function esc(s) { return s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
@@ -81,6 +89,39 @@ function shortAnswerHtml(topics, results, query) {
   </article>`;
 }
 
+/* Ask the AI backend for an answer grounded in the top passages, and
+   show it above everything else. Citations [n] in the answer map to the
+   numbered passages sent, printed in the usual citation format. */
+async function askAI(query, results) {
+  const seq = ++aiSeq;
+  const slot = document.getElementById("ai-answer");
+  if (!slot) return;
+  slot.innerHTML = `<article class="card short-answer"><h3>Answer</h3><p class="muted">Reading the top rules and writing an answer…</p></article>`;
+  try {
+    const passages = results.slice(0, 8).map(({ chunk }) => ({
+      doc: chunk.doc, section: chunk.section, page: chunk.page, text: chunk.text,
+    }));
+    const res = await fetch(AI_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: query, passages }),
+    });
+    if (!res.ok) throw new Error("ai " + res.status);
+    const data = await res.json();
+    if (seq !== aiSeq || !data.answer) { if (seq === aiSeq) slot.innerHTML = ""; return; }
+    const cites = (data.citations || passages).map((c, i) =>
+      `<p class="cite">[${i + 1}] ${citation(c)}</p>`).join("");
+    slot.innerHTML = `<article class="card short-answer">
+      <h3>Answer</h3>
+      <p class="answer-text">${esc(data.answer)}</p>
+      ${cites}
+      <p class="muted">Written by AI only from the passages below — the exact rule text in the cards is what counts.</p>
+    </article>`;
+  } catch (e) {
+    if (seq === aiSeq) slot.innerHTML = "";
+  }
+}
+
 function render(query) {
   const box = $("#results");
   if (!INDEX) { box.innerHTML = "<p class='muted'>Loading the rule book…</p>"; return; }
@@ -95,7 +136,7 @@ function render(query) {
     return;
   }
   const hints = topics.map(t => `<span class="chip">${esc(t.label)}</span>`).join(" ");
-  sum.innerHTML = `${shortAnswerHtml(topics, results, query)}
+  sum.innerHTML = `${AI_ENDPOINT ? `<div id="ai-answer"></div>` : ""}${shortAnswerHtml(topics, results, query)}
     <p><strong>${total} matching passage${total === 1 ? "" : "s"}</strong> — showing the top ${results.length}, best matches first.</p>
     ${hints ? `<p>Understood as: ${hints}</p>` : ""}
     ${topics.map(t => `<p class="hint">${esc(t.hint)}</p>`).join("")}
@@ -106,6 +147,7 @@ function render(query) {
       <p class="context">This passage mentions: ${matched.slice(0, 6).map(esc).join(", ")}</p>
       <p class="rule">${highlight(chunk.text, matched)}</p>
     </article>`).join("");
+  if (AI_ENDPOINT) askAI(query, results);
 }
 
 async function init() {

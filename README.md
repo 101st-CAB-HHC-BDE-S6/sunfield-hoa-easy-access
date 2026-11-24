@@ -19,7 +19,12 @@ It's a PWA: no app store, no account, and it works offline after the first visit
 
 ## How the "smart" search works (honestly)
 
-There is no backend, no API key, and no AI model. All search runs in your browser:
+The search itself has no backend, no API key, and runs entirely in your browser.
+On top of it sits one optional piece: an **AI answer** written by a small
+Cloudflare Worker (`worker/`, Workers AI, free tier) that receives your question
+plus the top passages the browser search found and may summarize *only those
+passages*, with citations. It stores nothing, and if it is ever unreachable the
+site silently falls back to the short answers and passages below. The pieces:
 
 - `data/search-index.json` — passages extracted from the HOA PDFs, each with document,
   page, and the nearest section/article/rule heading found in the source text
@@ -47,8 +52,8 @@ Known gaps: the portal library has **no standalone base Community Charter and no
 standalone Bylaws** — only amendments/supplements (the main rules document is filed
 under the Charter name). Several portal PDFs were scanned images with no text layer
 (Fining Policy filing, Commercial Land Charter, some amendments/certificates);
-they are listed on the site but are **not yet searchable** until someone OCRs them
-(`tools/ocr_pdfs.py` is ready for that — see "Rebuild the search index" below).
+those have been OCR'd and are now searchable (noted per document on the site;
+minor OCR errors are possible and the original PDFs govern).
 
 ## Run it locally
 
