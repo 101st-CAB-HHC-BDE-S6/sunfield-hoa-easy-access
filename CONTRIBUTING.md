@@ -16,8 +16,9 @@ If a natural question doesn't find the right passage:
 
 Other welcome help:
 
-- **OCR the scanned PDFs** listed as "not yet searchable" on the site, then
-  rebuild the index with `tools/build_index.py` and open a PR with the updated
+- **OCR the scanned PDFs** listed as "not yet searchable" on the site:
+  `tools/ocr_pdfs.py` (pdftoppm + tesseract) produces the text, then rebuild the
+  index with `tools/build_index.py` and open a PR with the updated
   `data/search-index.json`.
 - Better section/heading detection in `tools/build_index.py` (citations must
   always come from the source text — never invent a section or rule number).

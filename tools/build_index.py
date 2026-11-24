@@ -98,6 +98,15 @@ def main():
         txt_path = Path("/tmp") / (pdf.stem + ".txt")
         subprocess.run(["pdftotext", "-layout", str(pdf), str(txt_path)], check=True)
         raw = txt_path.read_text(errors="ignore")
+        used_ocr = False
+        if len(raw.strip()) < 100:
+            # Scanned-image PDF with no text layer: fall back to OCR text
+            # produced by tools/ocr_pdfs.py, if present.
+            ocr_path = Path(__file__).resolve().parent / "ocr_text" / (pdf.stem + ".txt")
+            if ocr_path.exists():
+                raw = ocr_path.read_text(errors="ignore")
+                used_ocr = True
+                print(f"  (using OCR text from {ocr_path.name})")
         pages = raw.split("\f")
         doc_id = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
         n_chunks = 0
@@ -131,9 +140,16 @@ def main():
                     cur, cur_sec = p, current_heading
             flush()
         searchable = n_chunks > 0
+        if used_ocr and searchable:
+            note = ("Scanned-image PDF — searchable text produced by OCR, so minor recognition "
+                    "errors are possible; the original PDF governs.")
+        elif searchable:
+            note = ""
+        else:
+            note = "Scanned-image PDF in the portal — no text layer, so not yet searchable. Listed for completeness."
         docs.append({"id": doc_id, "name": name, "date": date, "category": cat,
                      "pages": len(pages), "chunks": n_chunks, "searchable": searchable,
-                     "note": "" if searchable else "Scanned-image PDF in the portal — no text layer, so not yet searchable. Listed for completeness."})
+                     "ocr": used_ocr, "note": note})
         print(f"{name}: {len(pages)} pages, {n_chunks} chunks")
     out = Path(__file__).resolve().parent.parent / "data" / "search-index.json"
     out.write_text(json.dumps({"generated": "2026-11-24", "documents": docs, "chunks": chunks}, separators=(",", ":")))

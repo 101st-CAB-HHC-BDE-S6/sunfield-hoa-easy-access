@@ -28,6 +28,12 @@ body{margin:0;font-family:Georgia,'Times New Roman',serif;color:var(--ink);backg
 main{max-width:760px;margin:0 auto;padding:1rem}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;margin:0 0 .9rem;box-shadow:0 2px 8px rgba(90,50,20,.07)}
 .cite{margin:0 0 .35rem;font-weight:bold;color:var(--accent2);font-size:.98rem}
+.short-answer{border:2px solid var(--accent2);background:linear-gradient(180deg,#fff8ec,var(--card))}
+.short-answer h3{margin:.1rem 0 .5rem;font-size:1.25rem}
+.short-answer .answer-text{font-size:1.12rem;line-height:1.55;margin:.2rem 0 .6rem}
+.short-answer ul{margin:.2rem 0 .6rem;padding-left:1.2rem}
+.short-answer li{margin-bottom:.55rem;line-height:1.5}
+.short-answer li .cite{font-size:.9rem}
 .context{margin:0 0 .5rem;color:var(--muted);font-size:.9rem;font-style:italic}
 .rule{margin:0;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
 mark{background:#ffe08a;padding:0 .1em;border-radius:3px}

@@ -24,6 +24,11 @@ There is no backend, no API key, and no AI model. All search runs in your browse
 - `data/search-index.json` — passages extracted from the HOA PDFs, each with document,
   page, and the nearest section/article/rule heading found in the source text
   (or an explicit "no section number in source" — numbers are never invented).
+- `answers.js` — the **short answer** shown first: for the main topics, a
+  plain-English summary written by hand only from the indexed passages, citing
+  them by document + page (resolved against the index at runtime; if the
+  documents don't directly address a topic, the answer says so). Other queries
+  get key requirement sentences pulled word-for-word from the top matches.
 - `search.js` — ranked keyword search plus a hand-built **HOA topic thesaurus**
   (`TOPICS`): searching *lights* also searches *lighting, illumination, exterior
   fixtures…*; asking about a *car wash* also searches *vehicles, driveways, water…*.
@@ -40,9 +45,10 @@ site's Sources section.
 
 Known gaps: the portal library has **no standalone base Community Charter and no
 standalone Bylaws** — only amendments/supplements (the main rules document is filed
-under the Charter name). Several portal PDFs are scanned images with no text layer
+under the Charter name). Several portal PDFs were scanned images with no text layer
 (Fining Policy filing, Commercial Land Charter, some amendments/certificates);
-they are listed on the site but are **not yet searchable** until someone OCRs them.
+they are listed on the site but are **not yet searchable** until someone OCRs them
+(`tools/ocr_pdfs.py` is ready for that — see "Rebuild the search index" below).
 
 ## Run it locally
 
@@ -57,8 +63,13 @@ Put the source PDFs in a folder (they are **not** committed to this repo — the
 the association's documents) and run:
 
 ```sh
+# Scanned-image PDFs only: OCR them first (pdftoppm + tesseract)
+python3 tools/ocr_pdfs.py /path/to/scanned.pdf [...]
 python3 tools/build_index.py /path/to/pdfs [extra.pdf ...]
 ```
+
+`build_index.py` uses `pdftotext` where a text layer exists and automatically
+falls back to the OCR text in `tools/ocr_text/` for scanned-image PDFs.
 
 ## License
 
